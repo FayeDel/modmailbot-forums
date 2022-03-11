@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "@discordjs/rest": "^0.3.0",
-    "dotenv": "^16.0.0"
+    "cat-loggr": "^1.2.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "slash-create": "^5.3.0"
   },
   "name": "modmailbot-forums",
   "description": "This is a proof of concept Discord bot that uses Forums to handle ModMail queries.",
