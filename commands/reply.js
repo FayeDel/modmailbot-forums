@@ -11,7 +11,7 @@ module.exports = class ReplyCommand extends SlashCommand {
                 type: CommandOptionType.STRING,
                 name: "message",
                 description: "The message to send to the other person.",
-                required: True
+                required: true
             }]
         });
         this.filePath = __filename;
