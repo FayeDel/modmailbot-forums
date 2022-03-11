@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@discordjs/rest": "^0.3.0"
+  },
+  "name": "modmailbot-forums",
+  "description": "This is a proof of concept Discord bot that uses Forums to handle ModMail queries.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeltaXWizard/modmailbot-forums.git"
+  },
+  "keywords": ["modmail", "discord", "discordjs", "forums"],
+  "author": "DeltaX",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeltaXWizard/modmailbot-forums/issues"
+  },
+  "homepage": "https://github.com/DeltaXWizard/modmailbot-forums#readme"
+}
