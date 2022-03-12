@@ -1,5 +1,3 @@
-// Self explanatory.
-
 const { SlashCommand, CommandOptionType } = require('slash-create');
 
 module.exports = class ReplyCommand extends SlashCommand {

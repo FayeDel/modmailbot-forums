@@ -1,5 +1,3 @@
-// Self explanatory.
-
 const { SlashCommand } = require('slash-create');
 
 module.exports = class CloseCommand extends SlashCommand {

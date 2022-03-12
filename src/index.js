@@ -1,4 +1,7 @@
 require('dotenv').config();
+require('@aero/require').config(process.cwd(), false);
+
+const constants = require('~/lib/constants');
 
 const { ExpressServer, SlashCreator } = require('slash-create');
 // const { RestClient } = require("@discordjs/rest");
@@ -36,5 +39,9 @@ creator.withServer(new ExpressServer())
 	.registerCommandsIn(path.join(__dirname, 'commands'))
 	.syncCommands()
 	.startServer();
+
+creator
+	.registerCommandsIn(path.join(__dirname, 'commands'))
+	.syncCommandsIn(constants.RYDIXORD);
 
 console.log(`Starting server at "localhost:${creator.options.serverPort}/interactions"`);

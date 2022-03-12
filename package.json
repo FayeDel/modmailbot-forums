@@ -2,7 +2,7 @@
   "name": "modmailbot-forums",
   "description": "This is a proof of concept Discord bot that uses Forums to handle ModMail queries.",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index",
   "repository": "https://github.com/DeltaXWizard/modmailbot-forums.git",
   "keywords": [
     "modmail",
@@ -15,6 +15,7 @@
     "Ravy <send@ravy.email> (https://ravy.contact)"
   ],
   "dependencies": {
+    "@aero/require": "^1.0.3",
     "@discordjs/rest": "^0.3.0",
     "cat-loggr": "^1.2.2",
     "dotenv": "^16.0.0",
