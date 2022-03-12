@@ -4,6 +4,8 @@
 
 const { SlashCommand } = require('slash-create');
 
+const { success } = require('~/lib/constants').emoji;
+
 module.exports = class SetupCommand extends SlashCommand {
 
 	constructor(creator) {
@@ -17,7 +19,7 @@ module.exports = class SetupCommand extends SlashCommand {
 	async run(ctx) {
 		const channelID = await ctx.creator.client.guild(ctx.guildID).resetForumChannel();
 
-		return `Setup complete. Your tickets will now appear in <#${channelID}>`;
+		return `${success} Setup complete. Your tickets will now appear in <#${channelID}>`;
 	}
 
 };

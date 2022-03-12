@@ -34,7 +34,7 @@ module.exports = class SetupCommand extends SlashCommand {
 	}
 
 	async run(ctx) {
-		if (!ctx.creator.client.owners.includes(ctx.user.id)) return `You may not run the eval command`;
+		if (!ctx.creator.client.owners.includes(ctx.user.id)) return `${constants.emoji.error} You may not run the eval command`;
 
 		let { code } = ctx.options;
 		const { depth } = ctx.options;
