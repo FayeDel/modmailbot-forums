@@ -1,9 +1,8 @@
-const { SlashCommand } = require('slash-create');
-const util = require('~/lib/util');
+const ThreadCommand = require('~/lib/structures/ThreadCommand');
 
-const { success, error } = require('~/lib/constants').emoji;
+const { success } = require('~/lib/util/constants').emoji;
 
-module.exports = class CloseCommand extends SlashCommand {
+module.exports = class CloseCommand extends ThreadCommand {
 
 	constructor(creator) {
 		super(creator, {
@@ -13,15 +12,7 @@ module.exports = class CloseCommand extends SlashCommand {
 		this.filePath = __filename;
 	}
 
-	async run(ctx) {
-		const channel = await ctx.creator.client.guild(ctx.guildID).channel(ctx.channelID);
-		if (!util.isThread(channel)) return `${error} This channel isn't a thread. Try going to <#${forumChannelID}> and selecting a thread there.`;
-
-		const forumChannelID = await ctx.creator.client.guild(ctx.guildID).getForumChannel();
-		if (!forumChannelID) return `${error} The bot hasn't been set up yet. Try running \`/setup\`.`;
-
-		if (channel.parent_id !== forumChannelID) return `${error} This isn't the channel that has been set up for tickets. Try going to <#${forumChannelID}> or running \`/setup\`.`;
-
+	async execute(ctx) {
 		return success;
 	}
 

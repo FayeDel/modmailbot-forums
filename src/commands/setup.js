@@ -2,11 +2,11 @@
 // to setup the bot. (This is also because of REST/HTTP not relying on the
 // associated Gateway event.)
 
-const { SlashCommand } = require('slash-create');
+const Command = require('~/lib/structures/Command');
 
-const { success } = require('~/lib/constants').emoji;
+const { success } = require('~/lib/util/constants').emoji;
 
-module.exports = class SetupCommand extends SlashCommand {
+module.exports = class SetupCommand extends Command {
 
 	constructor(creator) {
 		super(creator, {
@@ -16,7 +16,7 @@ module.exports = class SetupCommand extends SlashCommand {
 		this.filePath = __filename;
 	}
 
-	async run(ctx) {
+	async execute(ctx) {
 		const channelID = await ctx.creator.client.guild(ctx.guildID).resetForumChannel();
 
 		return `${success} Setup complete. Your tickets will now appear in <#${channelID}>`;

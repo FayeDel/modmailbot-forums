@@ -1,6 +1,8 @@
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const ThreadCommand = require('~/lib/structures/ThreadCommand');
 
-module.exports = class ReplyCommand extends SlashCommand {
+const { CommandOptionType } = require('slash-create');
+
+module.exports = class ReplyCommand extends ThreadCommand {
 
 	constructor(creator) {
 		super(creator, {
@@ -16,7 +18,7 @@ module.exports = class ReplyCommand extends SlashCommand {
 		this.filePath = __filename;
 	}
 
-	async run(ctx) {
+	async execute(ctx) {
 		return `Reply command executed, with content: ${ctx.options.message}`;
 	}
 

@@ -1,9 +1,10 @@
 // The idea of this is to add tags per post so they can be categorised
 // and ultimately easier to find than just scrolling/referencing through logs.
 
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const Command = require('~/lib/structures/Command');
+const { CommandOptionType } = require('slash-create');
 
-module.exports = class TagAddCommand extends SlashCommand {
+module.exports = class TagAddCommand extends Command {
 
 	constructor(creator) {
 		super(creator, {
@@ -24,7 +25,7 @@ module.exports = class TagAddCommand extends SlashCommand {
 		this.filePath = __filename;
 	}
 
-	async run(ctx) {
+	async execute(ctx) {
 		return `Tag add command executed, with content: ${ctx.options.thread_id} :: ${ctx.options.suggestion}`;
 	}
 
