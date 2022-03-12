@@ -15,7 +15,9 @@ module.exports = class SetupCommand extends SlashCommand {
 	}
 
 	async run(ctx) {
-		return 'Setup command executed.';
+		const channelID = await ctx.creator.client.guild(ctx.guildID).resetForumChannel();
+
+		return `Setup complete. Your tickets will now appear in <#${channelID}>`;
 	}
 
 };
