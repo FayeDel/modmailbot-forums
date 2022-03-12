@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "@aero/require": "^1.0.3",
+    "@discordjs/collection": "^0.5.0",
     "@discordjs/rest": "^0.3.0",
     "cat-loggr": "^1.2.2",
     "discord-api-types": "^0.29.0",

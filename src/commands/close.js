@@ -1,4 +1,5 @@
 const { SlashCommand } = require('slash-create');
+const util = require('~/lib/util');
 
 module.exports = class CloseCommand extends SlashCommand {
 
@@ -11,7 +12,10 @@ module.exports = class CloseCommand extends SlashCommand {
 	}
 
 	async run(ctx) {
-		return 'Close command executed.';
+		const channel = await ctx.creator.client.guild(ctx.guildID).channel(ctx.channelID);
+		if (util.isThread(channel)) return `isThread`;
+
+		return 'is not thread';
 	}
 
 };
