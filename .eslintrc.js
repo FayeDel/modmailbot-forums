@@ -1,3 +1,6 @@
 module.exports = {
-	extends: '@aero'
+	extends: '@aero',
+	rules: {
+		'prefer-destructuring': 'off'
+	}
 };

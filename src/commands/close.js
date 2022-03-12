@@ -12,8 +12,10 @@ module.exports = class CloseCommand extends ThreadCommand {
 		this.filePath = __filename;
 	}
 
-	async execute(ctx) {
-		return success;
+	async execute(ctx, { channel, guild }) {
+		await guild.channels.update(channel, { archived: true });
+
+		return `${success} This thread has been closed.`;
 	}
 
 };
