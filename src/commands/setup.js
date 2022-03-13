@@ -1,7 +1,3 @@
-// This command exists so that you have to do the associated command
-// to setup the bot. (This is also because of REST/HTTP not relying on the
-// associated Gateway event.)
-
 const Command = require('~/lib/structures/Command');
 const { CommandOptionType } = require('slash-create');
 

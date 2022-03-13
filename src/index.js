@@ -10,17 +10,10 @@ const mc = new MongoClient(process.env.MONGO_URI);
 const { Intents } = require('discord.js');
 const { GatewayServer, SlashCreator } = require('slash-create');
 
-// logger instance because its better to distinguish than pure console.log()
 const CatLoggr = require('cat-loggr');
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 
 const path = require('path');
-
-/*
- * The slash command client object will listen on port 5050.
- * For local development, ExpressServer's fine.
- * If this were to scale, you may need to use something else that `slash-create` supports.
- */
 
 async function main() {
 	await mc.connect();
@@ -55,10 +48,8 @@ async function main() {
 	creator.on('warn', (message) => logger.warn(message));
 	creator.on('error', (error) => logger.error(error));
 	creator.on('synced', () => logger.info('Commands synced!'));
-	creator.on('commandRun', (command, _, ctx) =>
-		logger.info(`${ctx.user.username}#${ctx.user.discriminator} (${ctx.user.id}) ran command ${command.commandName}`));
-	creator.on('commandRegister', (command) =>
-		logger.info(`Registered command ${command.commandName}`));
+	creator.on('commandRun', (command, _, ctx) => logger.info(`${ctx.user.username} (${ctx.user.id}) ran command ${command.commandName}`));
+	creator.on('commandRegister', (command) => logger.info(`Registered command ${command.commandName}`));
 	creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
 
 	creator.withServer(new GatewayServer((handler) => client.ws.on('INTERACTION_CREATE', handler)))
