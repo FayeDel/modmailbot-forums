@@ -17,6 +17,7 @@ module.exports = class CloseCommand extends ThreadCommand {
 		const userId = await client.forums.threads.user(guild, channel);
 		const user = await client.users.fetch(userId);
 		await client.forums.logger.closed(guild, user, author);
+		await client.forums.threads.db.deleteOne({ guild: guild.id, channel: channel.id });
 
 		await sleep(5);
 
