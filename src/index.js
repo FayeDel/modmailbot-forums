@@ -34,7 +34,10 @@ async function main() {
 		],
 		partials: [
 			'CHANNEL'
-		]
+		],
+		allowedMentions: {
+			parse: []
+		}
 	});
 
 	client.on('messageCreate', handleMessage);
