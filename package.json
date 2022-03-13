@@ -11,8 +11,8 @@
     "forums"
   ],
   "contributors": [
-    "DeltaX",
-    "Ravy <send@ravy.email> (https://ravy.contact)"
+    "Ravy <send@ravy.email> (https://ravy.contact)",
+    "DeltaX"
   ],
   "dependencies": {
     "@aero/require": "^1.0.3",
