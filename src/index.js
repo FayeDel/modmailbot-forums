@@ -2,10 +2,13 @@ require('dotenv').config();
 require('@aero/require').config(process.cwd(), false);
 
 const ModMail = require('~/lib/ModMail');
+const handleMessage = require('./message');
+
 const { MongoClient } = require('mongodb');
 const mc = new MongoClient(process.env.MONGO_URI);
 
-const { ExpressServer, SlashCreator } = require('slash-create');
+const { Intents } = require('discord.js');
+const { GatewayServer, SlashCreator } = require('slash-create');
 
 // logger instance because its better to distinguish than pure console.log()
 const CatLoggr = require('cat-loggr');
@@ -22,15 +25,29 @@ const path = require('path');
 async function main() {
 	await mc.connect();
 
-	const client = new ModMail(mc.db(process.env.MONGO_DB), process.env.DISCORD_BOT_TOKEN);
+	const client = new ModMail(mc.db(process.env.MONGO_DB), process.env.DISCORD_BOT_TOKEN, {
+		intents: [
+			Intents.FLAGS.GUILDS,
+			Intents.FLAGS.GUILD_MESSAGES,
+			Intents.FLAGS.DIRECT_MESSAGES,
+			Intents.FLAGS.GUILD_MEMBERS
+		],
+		partials: [
+			'CHANNEL'
+		]
+	});
 
-	await client.fetchOwners();
+	client.on('messageCreate', handleMessage);
+
+	await client.login(process.env.DISCORD_BOT_TOKEN);
+
+	const owners = await client.fetchOwners();
+	logger.info(`Registered owners [${owners.join(', ')}]`);
 
 	const creator = new SlashCreator({
 		applicationID: process.env.DISCORD_APP_ID,
 		publicKey: process.env.DISCORD_PUBLIC_KEY,
 		token: process.env.DISCORD_BOT_TOKEN,
-		serverPort: 5050,
 		client
 	});
 
@@ -44,14 +61,13 @@ async function main() {
 		logger.info(`Registered command ${command.commandName}`));
 	creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
 
-	creator.withServer(new ExpressServer())
+	creator.withServer(new GatewayServer((handler) => client.ws.on('INTERACTION_CREATE', handler)))
 		.registerCommandsIn(path.join(__dirname, 'commands'))
-		.syncCommands()
-		.startServer();
+		.syncCommands();
 
 	return creator;
 }
 
 main().then((creator) => {
-	logger.info(`Starting server at localhost:${creator.options.serverPort}/interactions`);
+	logger.info(`Logged in as ${creator.client.user.tag}.`);
 });

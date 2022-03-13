@@ -16,8 +16,9 @@ module.exports = class SetupCommand extends Command {
 		this.filePath = __filename;
 	}
 
-	async execute(ctx) {
-		const channelID = await ctx.creator.client.guild(ctx.guildID).resetForumChannel();
+	async execute(ctx, { client, guild }) {
+		const channelID = await client.forums.reset(guild);
+		await client.forums.logger.init(guild);
 
 		return `${success} Setup complete. Your tickets will now appear in <#${channelID}>`;
 	}

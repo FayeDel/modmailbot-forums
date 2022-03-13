@@ -1,6 +1,5 @@
 const ThreadCommand = require('~/lib/structures/ThreadCommand');
-
-const { success } = require('~/lib/util/constants').emoji;
+const { sleep } = require('~/lib/util');
 
 module.exports = class CloseCommand extends ThreadCommand {
 
@@ -12,10 +11,16 @@ module.exports = class CloseCommand extends ThreadCommand {
 		this.filePath = __filename;
 	}
 
-	async execute(ctx, { channel, guild }) {
-		await guild.channels.update(channel, { archived: true });
+	async execute(ctx, { user: author, channel, responder, client, guild }) {
+		await ctx.send(responder.success(`This thread has been closed by ${author} and will be deleted in a couple seconds.`));
 
-		return `${success} This thread has been closed.`;
+		const userId = await client.forums.threads.user(guild, channel);
+		const user = await client.users.fetch(userId);
+		await client.forums.logger.closed(guild, user, author);
+
+		await sleep(5);
+
+		await channel.delete();
 	}
 
 };

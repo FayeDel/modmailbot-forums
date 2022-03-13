@@ -20,6 +20,7 @@
     "@discordjs/rest": "^0.3.0",
     "cat-loggr": "^1.2.2",
     "discord-api-types": "^0.29.0",
+    "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
