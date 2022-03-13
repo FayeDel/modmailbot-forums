@@ -9,11 +9,11 @@ module.exports = class TagAddCommand extends Command {
 	constructor(creator) {
 		super(creator, {
 			name: 'tag',
-			description: 'Add a tag to this conversation/post.',
+			description: 'Add a tag to this conversation.',
 			options: [{
 				type: CommandOptionType.STRING,
 				name: 'thread_id',
-				description: 'The ID of the thread/post you want to add the tag to.',
+				description: 'The ID of the thread you want to add the tag to.',
 				required: true
 			}, {
 				type: CommandOptionType.STRING,

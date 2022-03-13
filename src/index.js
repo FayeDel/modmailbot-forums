@@ -1,19 +1,26 @@
 require('dotenv').config();
+
+// This rewrites require calls so it's easier to reference files. ../../lib/util becomes ~/lib/util
 require('@aero/require').config(process.cwd(), false);
 
+// Custom client impl
 const ModMail = require('~/lib/ModMail');
+
+// Message handler
 const handleMessage = require('./message');
 
+// Database; we use MongoDB because it requires almost no effort
 const { MongoClient } = require('mongodb');
 const mc = new MongoClient(process.env.MONGO_URI);
 
 const { Intents } = require('discord.js');
 const { GatewayServer, SlashCreator } = require('slash-create');
 
+// Fancy logging
 const CatLoggr = require('cat-loggr');
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 
-const path = require('path');
+const { join } = require('path');
 
 async function main() {
 	await mc.connect();
@@ -44,16 +51,13 @@ async function main() {
 		client
 	});
 
-	creator.on('debug', (message) => logger.log(message));
-	creator.on('warn', (message) => logger.warn(message));
-	creator.on('error', (error) => logger.error(error));
 	creator.on('synced', () => logger.info('Commands synced!'));
 	creator.on('commandRun', (command, _, ctx) => logger.info(`${ctx.user.username} (${ctx.user.id}) ran command ${command.commandName}`));
 	creator.on('commandRegister', (command) => logger.info(`Registered command ${command.commandName}`));
 	creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
 
 	creator.withServer(new GatewayServer((handler) => client.ws.on('INTERACTION_CREATE', handler)))
-		.registerCommandsIn(path.join(__dirname, 'commands'))
+		.registerCommandsIn(join(__dirname, 'commands'))
 		.syncCommands();
 
 	return creator;

@@ -6,7 +6,7 @@ module.exports = class CloseCommand extends ThreadCommand {
 	constructor(creator) {
 		super(creator, {
 			name: 'close',
-			description: 'Closes the thread and log it to the log forum channel.'
+			description: 'Closes the thread and logs the action.'
 		});
 		this.filePath = __filename;
 	}

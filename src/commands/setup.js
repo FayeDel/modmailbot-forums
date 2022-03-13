@@ -8,7 +8,7 @@ module.exports = class SetupCommand extends Command {
 	constructor(creator) {
 		super(creator, {
 			name: 'setup',
-			description: 'Sets up the modmail forum channels.',
+			description: 'Sets up the modmail forum channel.',
 			options: [
 				{
 					type: CommandOptionType.ROLE,
