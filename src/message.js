@@ -7,11 +7,15 @@ module.exports = async function handleMessage(msg) {
 
 	if (!msg.guild) return false;
 
+	return true;
+
+	/*
 	const forum = await msg.client.forums.get(msg.guild);
 	if (!forum) return false;
 	if (msg.channel.parentId !== forum) return false;
 
 	return handleGuild(msg);
+	*/
 };
 
 async function handleDMs(msg) {
@@ -20,8 +24,6 @@ async function handleDMs(msg) {
 	const thread = await msg.client.channels.fetch(threadId);
 
 	thread.send(`**${msg.author.username}:** ${msg.content}`);
-
-	console.log(`DM: ${msg.content}`);
 }
 
 async function handleGuild(msg) {
