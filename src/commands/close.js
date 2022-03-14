@@ -12,16 +12,18 @@ module.exports = class CloseCommand extends ThreadCommand {
 	}
 
 	async execute(ctx, { user: author, channel, responder, client, guild }) {
-		await ctx.send(responder.success(`This thread has been closed by ${author} and will be deleted in a couple seconds.`));
+		await ctx.send(responder.success(`This thread has been closed by ${author}.`));
 
 		const userId = await client.forums.threads.user(guild, channel);
 		const user = await client.users.fetch(userId);
+		await channel.setName(`${user.id}-${Math.floor(new Date().getTime() / 1000)}`);
 		await client.forums.logger.closed(guild, user, author);
 		await client.forums.threads.db.deleteOne({ guild: guild.id, channel: channel.id });
+		await client.db.collection('archived').insertOne({ guild: guild.id, channel: channel.id, user: user.id });
 
 		await sleep(5);
 
-		await channel.delete();
+		await this.client.rest10.patch(`/channels/${channel.id}`, { body: { archived: true } });
 	}
 
 };
