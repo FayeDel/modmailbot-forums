@@ -23,7 +23,7 @@ module.exports = class CloseCommand extends ThreadCommand {
 
 		await sleep(5);
 
-		await this.client.rest10.patch(`/channels/${channel.id}`, { body: { archived: true } });
+		await channel.setArchived(true);
 	}
 
 };
