@@ -1,6 +1,6 @@
 const Command = require('~/lib/structures/Command');
 const { CommandOptionType } = require('slash-create');
-
+const constants = require('~/lib/util/constants');
 const { success } = require('~/lib/util/constants').emoji;
 
 module.exports = class SetupCommand extends Command {
@@ -16,7 +16,8 @@ module.exports = class SetupCommand extends Command {
 					description: 'A role that gets pinged whenever a ticket gets created. Will create one if not given.',
 					required: false
 				}
-			]
+			],
+			guildIDs: [constants.RYDIXORD]
 		});
 		this.filePath = __filename;
 	}
