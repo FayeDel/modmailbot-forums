@@ -21,7 +21,6 @@ const CatLoggr = require('cat-loggr');
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 
 const { join } = require('path');
-const { inspect } = require('util');
 
 async function main() {
 	await mc.connect();
@@ -58,7 +57,7 @@ async function main() {
 	creator.on('synced', () => logger.info('Commands synced!'));
 	creator.on('commandRun', (command, _, ctx) => logger.info(`${ctx.user.username} (${ctx.user.id}) ran command ${command.commandName}`));
 	creator.on('commandRegister', (command) => logger.info(`Registered command ${command.commandName}`));
-	creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));;
+	creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
 
 	creator.withServer(new GatewayServer((handler) => client.ws.on('INTERACTION_CREATE', handler)))
 		.registerCommandsIn(join(__dirname, 'commands'))
