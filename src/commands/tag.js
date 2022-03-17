@@ -1,11 +1,11 @@
 // The idea of this is to add tags per post so they can be categorised
 // and ultimately easier to find than just scrolling/referencing through logs.
 
-const Command = require('~/lib/structures/Command');
+const ThreadCommand = require('~/lib/structures/ThreadCommand');
 const { CommandOptionType } = require('slash-create');
 const constants = require('~/lib/util/constants');
 
-module.exports = class TagAddCommand extends Command {
+module.exports = class TagAddCommand extends ThreadCommand {
 
 	constructor(creator) {
 		super(creator, {
@@ -17,13 +17,7 @@ module.exports = class TagAddCommand extends Command {
 				name: 'add',
 				description: 'Add a tag to a thread/forum post.',
 				options: [{
-					name: 'thread_id',
-					description: 'The ID of the thread you want to add the tag to.',
-					required: true,
-					autocomplete: true,
-					type: CommandOptionType.STRING
-				}, {
-					name: 'suggestion',
+					name: 'tag',
 					description: 'The tag name to attach to the post.',
 					required: true,
 					autocomplete: true,
@@ -35,8 +29,8 @@ module.exports = class TagAddCommand extends Command {
 				name: 'remove',
 				description: 'Remove a tag to a thread/forum post.',
 				options: [{
-					name: 'thread_id',
-					description: 'The ID of the thread you want to remove the tag to.',
+					name: 'tag',
+					description: 'The tag name to remove from the post.',
 					required: true,
 					autocomplete: true,
 					type: CommandOptionType.STRING
@@ -47,50 +41,42 @@ module.exports = class TagAddCommand extends Command {
 	}
 
 	async autocomplete(ctx) {
-		let option = ctx.focused; // this is a string of the current focused option
+		const { client } = ctx.creator;
 
-		console.log(ctx.option[option]);
-		ctx.sendResults([{ name: `Your text: ${ctx.options[ctx.focused]}`, value: ctx.options[ctx.focused] }]);
+		if (!ctx.guildID) return [];
 
-		// TODO: Fix this internally, this does not seem to activate.
+		const guild = client.guilds.cache.get(ctx.guildID);
+		const tags = await client.forums.fetchTags(guild);
+
+		const input = ctx.options[ctx.subcommands[0]][ctx.focused].toLowerCase();
+
+		let filteredTags = input?.length ? tags.filter(tag => tag.name.toLowerCase().startsWith(input)) : tags;
+		if (!filteredTags.length) filteredTags = tags;
+
+		ctx.sendResults(filteredTags.map(tag => ({ name: `${tag.emoji_name ? `${tag.emoji_name} ` : ''}${tag.name}`, value: tag.id })));
 	}
 
 
-	async execute(ctx, { client }) {
+	async execute(ctx, { channel, responder, guild, client }) {
+		const action = ctx.subcommands[0];
+		const tag = ctx.options[action]['tag'];
+	
+		let { applied_tags } = await client.rest10.get(`/channels/${channel.id}`);
+		if (!applied_tags) applied_tags = [];
+		const available_tags = await client.forums.fetchTags(guild);
 
-		let returnvalues = [ctx.subcommands[0]];  // This is needed to be referenced for parsing reasons.
-		// aka ["add", "<thread_id>", "<suggestion>"] || ["remove", "<thread_id>", undefined]
-
-		// We first need to determine what subcommands were used.
-		switch (ctx.subcommands[0]) {
-			case "add":
-				switch (Object.keys(ctx.options[ctx.subcommands[0]])[0]) {
-					// Find the options per /tag add
-					case 'thread_id':
-						returnvalues.push(ctx.options[ctx.subcommands[0]]['thread_id']);
-					case 'suggestion':
-						returnvalues.push(ctx.options[ctx.subcommands[0]]['suggestion']);
-				}
+		switch(action) {
+			case 'add':
+				if (applied_tags.includes(tag)) return responder.error('This tag is already applied to the channel');
+				client.rest10.patch(`/channels/${channel.id}`, { body: { applied_tags: [...applied_tags, tag] } });
 				break;
-			case "remove":
-				switch (Object.keys(ctx.options[ctx.subcommands[0]])[0]) {
-					// Find the options per /tag add
-					case 'thread_id':
-						returnvalues.push(ctx.options[ctx.subcommands[0]]['thread_id']);
-						break;
-				}
+			case 'remove':
+				if (!applied_tags.includes(tag)) return responder.error('This tag does not exist on this channel');
+				client.rest10.patch(`/channels/${channel.id}`, { body: { applied_tags: applied_tags.filter(t => t !== tag) } });
 				break;
 		}
 
-		if (returnvalues.at(2) !== undefined) {
-			// If they're not undefined, fetch the tag from the API.
-		}
-
-		// since autocomplete doesn't work (atm), the below line is commented out.
-		// let thread =  await client.channels.fetch(threadId);
-		// and use the above thread obj to assign/remove tags.
-
-		return `Tag command executed. (Check console for ext. output)\nData:: /${returnvalues[0]} ${returnvalues[1]} ${returnvalues.at(2) !== undefined ? returnvalues[2] : "N/A"}`
+		return responder.success(`${action === 'add' ? 'Tagged' : 'Untagged'} ${channel} with **${available_tags.find(t => t.id === tag).name}**.`);
 	}
 
 };
