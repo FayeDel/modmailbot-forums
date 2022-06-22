@@ -4,7 +4,6 @@ const Command = require('~/lib/structures/Command');
 
 const { CommandOptionType } = require('slash-create');
 const util = require('~/lib/util');
-const constants = require('~/lib/util/constants');
 const { inspect } = require('util');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -30,7 +29,7 @@ module.exports = class SetupCommand extends Command {
 					required: false
 				}
 			],
-			guildIDs: [constants.RYDIXORD]
+			guildIDs: [process.env.DISCORD_GUILD_ID]
 		});
 		this.filePath = __filename;
 	}

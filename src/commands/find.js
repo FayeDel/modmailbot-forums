@@ -1,6 +1,5 @@
 const Command = require('~/lib/structures/Command');
 const { CommandOptionType } = require('slash-create');
-const constants = require('~/lib/util/constants');
 
 module.exports = class CloseCommand extends Command {
 
@@ -14,7 +13,7 @@ module.exports = class CloseCommand extends Command {
 				description: 'The user whose threads to search.',
 				required: true
 			}],
-			guildIDs: [constants.RYDIXORD]
+			guildIDs: [process.env.DISCORD_GUILD_ID]
 		});
 		this.filePath = __filename;
 	}

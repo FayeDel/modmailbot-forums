@@ -1,5 +1,3 @@
-const { RYDIXORD } = require('~/lib/util/constants');
-
 module.exports = async function handleMessage(msg) {
 	if (msg.author.bot) return false;
 
@@ -19,7 +17,7 @@ module.exports = async function handleMessage(msg) {
 };
 
 async function handleDMs(msg) {
-	const guild = await msg.client.guilds.fetch(RYDIXORD);
+	const guild = await msg.client.guilds.fetch(process.env.DISCORD_GUILD_ID);
 	const threadId = await msg.client.forums.threads.fetch(guild, msg.author);
 	const thread = await msg.client.channels.fetch(threadId);
 

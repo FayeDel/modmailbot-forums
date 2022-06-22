@@ -1,6 +1,5 @@
 const ThreadCommand = require('~/lib/structures/ThreadCommand');
 const { CommandOptionType } = require('slash-create');
-const constants = require('~/lib/util/constants');
 
 module.exports = class CloseCommand extends ThreadCommand {
 
@@ -14,7 +13,7 @@ module.exports = class CloseCommand extends ThreadCommand {
 				description: 'The message to send to the user.',
 				required: true
 			}],
-			guildIDs: [constants.RYDIXORD]
+			guildIDs: [process.env.DISCORD_GUILD_ID]
 		});
 		this.filePath = __filename;
 	}

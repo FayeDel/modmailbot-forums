@@ -3,7 +3,6 @@
 
 const ThreadCommand = require('~/lib/structures/ThreadCommand');
 const { CommandOptionType } = require('slash-create');
-const constants = require('~/lib/util/constants');
 
 module.exports = class TagAddCommand extends ThreadCommand {
 
@@ -11,7 +10,7 @@ module.exports = class TagAddCommand extends ThreadCommand {
 		super(creator, {
 			name: 'tag',
 			description: 'Modify tags to a forum channel/post.',
-			guildIDs: [constants.RYDIXORD],
+			guildIDs: [process.env.DISCORD_GUILD_ID],
 			options: [{
 				type: CommandOptionType.SUB_COMMAND,
 				name: 'add',

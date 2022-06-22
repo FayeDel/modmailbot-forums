@@ -1,6 +1,5 @@
 const Command = require('~/lib/structures/Command');
 const { CommandOptionType } = require('slash-create');
-const constants = require('~/lib/util/constants');
 const { success } = require('~/lib/util/constants').emoji;
 
 module.exports = class SetupCommand extends Command {
@@ -17,7 +16,7 @@ module.exports = class SetupCommand extends Command {
 					required: false
 				}
 			],
-			guildIDs: [constants.RYDIXORD]
+			guildIDs: [process.env.DISCORD_GUILD_ID]
 		});
 		this.filePath = __filename;
 	}
